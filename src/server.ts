@@ -78,29 +78,27 @@ app.use(helmet());
 
 //Apply rate limiting middleware to prevent excessive requests and enhance security
 app.use(limiter);
-
 (async () => {
   try {
-    //Initialize database connection
-    await config.DATA_SOURCE.initialize()
-      .then(async () => {
-        console.log('✅ Database connection successful');
-        await seedAdminUser(); // ⬅️ Seed admin user
-      })
-      .catch((error) => {
-        console.error('❌ Database connection failed:', error);
-      });
+    // 1. Initialize DB
+    await config.DATA_SOURCE.initialize();
+    console.log('✅ Database connection successful');
 
+    // 2. Seed admin user
+    await seedAdminUser();
+
+    // 3. Register routes
     app.use('/api/v1', v1Router);
 
-    app.listen(3000, () => {
-      console.log(`Server is running on port ${config.PORT}`);
+    // 4. Start server
+    app.listen(config.PORT || 3000, () => {
+      console.log(`🚀 Server is running on port ${config.PORT || 3000}`);
     });
   } catch (error) {
-    console.log('Failed to start server', error);
+    console.error('❌ Failed to start server:', error);
 
     if (config.NODE_ENV === 'production') {
-      process.exit(1); // Exit the process with an error
+      process.exit(1);
     }
   }
 })();

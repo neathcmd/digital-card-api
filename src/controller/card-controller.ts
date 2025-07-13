@@ -33,16 +33,21 @@ export const getCardsAdminController = async (
   res: Response,
 ): Promise<void> => {
   const { page, limit, sortBy, sortOrder, ...filters } = req.query;
-  const result = await getAllCardsAdminService({
-    page: parseInt(page as string, 10) || 1,
-    limit: parseInt(limit as string, 10) || 10,
-    sortBy: sortBy as string,
-    sortOrder: (sortOrder?.toString().toUpperCase() === 'ASC'
-      ? 'ASC'
-      : 'DESC') as 'ASC' | 'DESC',
-    filters: filters as Record<string, string>,
-  });
-  res.status(201).json(result);
+
+  try {
+    const result = await getAllCardsAdminService({
+      page: parseInt(page as string, 10) || 1,
+      limit: parseInt(limit as string, 10) || 10,
+      sortBy: sortBy as string,
+      sortOrder: (sortOrder?.toString().toUpperCase() === 'ASC'
+        ? 'ASC'
+        : 'DESC') as 'ASC' | 'DESC',
+      filters: filters as Record<string, string>,
+    });
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json('Failed to sort by full name cards,');
+  }
 };
 
 export const deleteAdminCardController = async (

@@ -35,8 +35,10 @@ export const paginate = async <T extends ObjectLiteral>(
 
   let qb = repo.createQueryBuilder('entity').skip(skip).take(limit);
 
-  // ✅ Default to false unless explicitly provided in filters
-  const isDeleted = filters?.is_deleted ?? false;
+  const isDeleted =
+    filters?.is_deleted !== undefined
+      ? filters.is_deleted === 'true' // ✅ convert string to boolean
+      : false;
 
   qb = qb.where('entity.is_deleted = :isDeleted', { isDeleted });
 

@@ -91,8 +91,8 @@ app.use(limiter);
     app.use('/api/v1', v1Router);
 
     // 4. Start server
-    app.listen(config.PORT || 3000, () => {
-      console.log(`🚀 Server is running on port ${config.PORT || 3000}`);
+    app.listen(config.PORT || 7000, () => {
+      console.log(`🚀 Server is running on port ${config.PORT || 7000}`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

@@ -27,6 +27,10 @@ export const createCardService = async (req: Request, res: Response) => {
     phone,
     nationality,
     card_type,
+    bio,
+    job,
+    web_site,
+    company,
     // social link
     social = [],
   } = req.body;
@@ -53,6 +57,10 @@ export const createCardService = async (req: Request, res: Response) => {
     dob,
     address,
     phone,
+    bio,
+    job,
+    web_site,
+    company,
     card_type,
     nationality,
   });
@@ -93,6 +101,10 @@ export const updateCardService = async (req: Request, res: Response) => {
     phone,
     nationality,
     card_type,
+    job,
+    company,
+    web_site,
+    bio,
     social = [],
   } = req.body;
 
@@ -134,6 +146,10 @@ export const updateCardService = async (req: Request, res: Response) => {
   card.address = address;
   card.phone = phone;
   card.nationality = nationality;
+  card.bio = bio;
+  card.web_site = web_site;
+  card.company = company;
+  card.job = job;
   await cardRepo.save(card);
 
   const incomingIds = social.filter((s: any) => s.id).map((s: any) => s.id);
@@ -300,5 +316,23 @@ export const deleteAdminCardService = async (req: Request, res: Response) => {
   await cardRepo.update({ id: cardId }, { is_deleted: true });
   return {
     message: 'Delete card successfully',
+  };
+};
+
+export const getCardByIdService = async (req: Request, res: Response) => {
+  const cardId = req.params.id;
+  const cardRepo = AppDataSource.getRepository(IdCard);
+  const card = await cardRepo.findOne({
+    where: { id: cardId },
+    relations: ['socialLinks'],
+  });
+  if (!card) {
+    return {
+      message: 'Card not found',
+    };
+  }
+  return {
+    message: 'Get card successfully',
+    card,
   };
 };

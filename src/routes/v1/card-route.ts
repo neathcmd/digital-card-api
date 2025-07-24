@@ -2,6 +2,7 @@ import {
   createCardController,
   deleteAdminCardController,
   deleteCardUserController,
+  getCardByIdController,
   getCardsAdminController,
   getCardsUserController,
   updateCardController,
@@ -18,6 +19,7 @@ router.post('/create-card', authMiddleware, createCardController);
 router.put('/update-card/:id', authMiddleware, updateCardController);
 router.delete('/delete-card/:id', authMiddleware, deleteCardUserController);
 router.get('/get-cards', authMiddleware, getCardsUserController);
+router.get('/get-card/:id', authMiddleware, getCardByIdController);
 
 router.get(
   '/get-cards-by-admin',
